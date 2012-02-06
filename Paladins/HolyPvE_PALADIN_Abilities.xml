@@ -589,26 +589,7 @@ end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Cleanse Priority</N
     i = i + 1;
     buff,_,_,count,bufftype,duration = UnitDebuff(PQR_CustomTarget, i)
   end
-end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Lay on Hands</Name><Default>false</Default><SpellID>633</SpellID><Actions></Actions><Lua>-- Lay on Hands if target is at 15% --
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Lay on Hands</Name><Default>false</Default><SpellID>633</SpellID><Actions></Actions><Lua>-- Lay on Hands if target is at 15% --
 
 if PQR_CustomTargetHP &amp;lt; 10 and UnitThreatSituation(PQR_CustomTarget) == 3 then
   return true
@@ -626,26 +607,7 @@ if UnitGroupRolesAssigned(PQR_CustomTarget) == &amp;quot;TANK&amp;quot; and PQR_
 	return true
 end
 
---Stolen Shamelessly from Lofty.... I&amp;apos;m surprised I never incorporated this before... touche Lofty.. .touche</Lua><RecastDelay>0</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Holy Radiance Onya</Name><Default>false</Default><SpellID>82327</SpellID><Actions></Actions><Lua>local _, _, _, cost = GetSpellInfo(82327)
+--Stolen Shamelessly from Lofty.... I&amp;apos;m surprised I never incorporated this before... touche Lofty.. .touche</Lua><RecastDelay>0</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Holy Radiance Onya</Name><Default>false</Default><SpellID>82327</SpellID><Actions></Actions><Lua>local _, _, _, cost = GetSpellInfo(82327)
 local mana = UnitPower(&amp;quot;player&amp;quot;) 
 local spell = UnitCastingInfo(&amp;quot;player&amp;quot;)
 
@@ -655,26 +617,7 @@ if mana &amp;gt; cost and spell ~= GetSpellInfo(82327) then
       PQR_CustomTarget = HRtarget
       return true
    end
-end</Lua><RecastDelay>100</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Onya HR TargetFinder</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if GetNumRaidMembers() &amp;gt; 0 then
+end</Lua><RecastDelay>100</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Onya HR TargetFinder</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if GetNumRaidMembers() &amp;gt; 0 then
 hrtargethealth = 85
 hrsecondaryhealth = 85
 hrrange = 10
@@ -792,26 +735,7 @@ for i = 0, mems, 1 do
        then table.insert(hrtargets,i) end
      if member[i].health &amp;lt; hrsecondaryhealth then table.insert(hrsecondary,i) end
    end
-end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Bubba Functions</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if not functions then
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Bubba Functions</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if not functions then
 	function RaidSize()
 		if GetNumRaidMembers() &amp;gt; 0 then
 			local RSize = GetNumRaidMembers()
@@ -857,47 +781,9 @@ end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Bubba Functions<
 
 
 	functions = 1
-end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Test Raid Size</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if IsRightShiftKeyDown() and not GetCurrentKeyBoardFocus() then
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Test Raid Size</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if IsRightShiftKeyDown() and not GetCurrentKeyBoardFocus() then
 	print(&amp;quot;The current Raid Size is &amp;quot;..tostring(RaidSize() ) )
-end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Aura</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if not savedAura then
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Aura</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if not savedAura then
 	savedAura = 3
 end
 
@@ -914,26 +800,7 @@ elseif not IsMounted() and savedAura ~= myAura then
 elseif not IsMounted() and (myAura == 5 or myAura == 0 or myAura == nil) then
 	CastSpellByID(19746, &amp;quot;player&amp;quot;)
 	savedAura = 3
-end</Lua><RecastDelay>0</RecastDelay><Target>Player</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Perma Pause</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if pauseToggle == nil then modkeytime = 0 end
+end</Lua><RecastDelay>0</RecastDelay><Target>Player</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Perma Pause</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if pauseToggle == nil then modkeytime = 0 end
 if IsRightControlKeyDown() and GetTime() - modkeytime &amp;gt; 1  then
   modkeytime = GetTime()
   if pauseToggle then 
@@ -945,26 +812,7 @@ end
 
 if pauseToggle == 1 then
 	return true
-end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(GetSpellInfo(635),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Beacon - Valma</Name><Default>false</Default><SpellID>53563</SpellID><Actions></Actions><Lua>if not BeaconDeclared then
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Beacon - Valma</Name><Default>false</Default><SpellID>53563</SpellID><Actions></Actions><Lua>if not BeaconDeclared then
 	PQ_BeaconTarget = &amp;quot;player&amp;quot;
 	PQ_BeaconTargetName = UnitName(PQ_BeaconTarget, true)
 	BeaconDeclared = true
@@ -1026,26 +874,7 @@ if PQ_BeaconTarget then
       	BeaconDeclared = false	-- Beacon target not found reinit and drop target to player	
       	print(&amp;quot;\124cFFDBFA2A ++ Beacon target not found!!!Beacon placed on player! ++&amp;quot;)
 	end
-end</Lua><RecastDelay>100</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(GetSpellInfo(635),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Beacon - Valma Edit</Name><Default>false</Default><SpellID>53563</SpellID><Actions></Actions><Lua>if not PQ_BeaconTarget then
+end</Lua><RecastDelay>100</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Beacon - Valma Edit</Name><Default>false</Default><SpellID>53563</SpellID><Actions></Actions><Lua>if not PQ_BeaconTarget then
 	PQ_BeaconTarget = &amp;quot;player&amp;quot;
 	BeaconTargetName = UnitName(&amp;quot;player&amp;quot;, true)
 end
@@ -1101,23 +930,4 @@ else
 			return true
 		end
 	end		
-end</Lua><RecastDelay>100</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore>if not healinit then
-
-  function CalculateHP(t)
-    local incomingheal = 0
-    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
-    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
-  end
-
-  function SafeTarget(t)
-    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
-    and UnitIsCharmed(t) == nil
-    and UnitIsDeadOrGhost(t) == nil 
-    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
-    and PQR_IsOutOfSight(t) == false 
-    then return true end 
-  end
-
-  healinit = true
-
-end</LuaBefore><LuaAfter></LuaAfter></Ability></PALADIN>
+end</Lua><RecastDelay>100</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability></PALADIN>
