@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?><PALADIN><Ability><Name>--- Targeting System</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if SafeTarget(&amp;quot;target&amp;quot;) then 
+  PQR_CustomTarget = &amp;quot;target&amp;quot; 
+  PQR_CustomTargetHP = CalculateHP(&amp;quot;target&amp;quot;) 
+elseif SafeTarget(&amp;quot;mouseover&amp;quot;) and GetMouseFocus() ~= WorldFrame then 
+  PQR_CustomTarget = &amp;quot;mouseover&amp;quot;
+  PQR_CustomTargetHP = CalculateHP(&amp;quot;mouseover&amp;quot;) 
+else 
+  lowhpmembers = 0
+  missingfortitude = false
+  missingshadow = false
+  havemending = false
+  priodispel = nil
+  PQR_CustomTarget = &amp;quot;player&amp;quot;
+  PQR_CustomTargetHP = CalculateHP(&amp;quot;player&amp;quot;)
+  local group = &amp;quot;party&amp;quot;
+  local members = GetNumPartyMembers()
+  if GetNumRaidMembers() &amp;gt; 0 then group = &amp;quot;raid&amp;quot; members = GetNumRaidMembers() end
+
+  for i = 1, members, 1 do
+    local member = group..tostring(i)
+    local memberhp = CalculateHP(member)
+    if SafeTarget(member)  then
+      if UnitBuffID(member,41635) then havemending = true end
+      if not UnitBuffID(member,79107) then missingshadow = true end
+      if not UnitBuffID(member,79105) and not UnitBuffID(member,90364) and not UnitBuffID(member,469) 
+      and not UnitBuffID(member,6307) then missingfortitude = true end
+      if UnitGroupRolesAssigned(member) == &amp;quot;TANK&amp;quot; then memberhp = memberhp - 1 end
+      if UnitThreatSituation(member) == 3 then memberhp = memberhp - 3 end
+      if memberhp &amp;lt; 90 then lowhpmembers = lowhpmembers +1 end
+      if memberhp &amp;lt; PQR_CustomTargetHP then
+        PQR_CustomTarget = member
+        PQR_CustomTargetHP = memberhp
+      end
+      if DangerousMagic(member) and not DontDispel(member) then priodispel = member end 
+
+    end
+  end
+
+  if SafeTarget(&amp;quot;pet&amp;quot;) and DangerousMagic(&amp;quot;pet&amp;quot;) and not DontDispel(&amp;quot;pet&amp;quot;) then  priodispel = &amp;quot;pet&amp;quot; end
+  if priodispel then PQR_CustomTarget = priodispel end
+
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>--- Functions and Constants</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if not healinit then
+
+  function CalculateHP(t)
+    local incomingheal = 0
+    if UnitGetIncomingHeals(t) then incomingheal = UnitGetIncomingHeals(t)  end
+    return 100 * ( UnitHealth(t) + incomingheal ) / UnitHealthMax(t)
+  end
+
+  function SafeTarget(t)
+    if IsSpellInRange(tostring(GetSpellInfo(635)),t) == 1 
+    and UnitIsCharmed(t) == nil
+    and UnitIsDeadOrGhost(t) == nil 
+    and UnitCanCooperate(&amp;quot;player&amp;quot;,t) 
+    and PQR_IsOutOfSight(t) == false 
+    then return true end 
+  end
+
+  function DontDispel(t)
+    local buff  = { 96328, 96325, 96326, 86788, 30108 } 
+    for _,v in ipairs(buff) do if UnitDebuffID(t,v) then return true end end
+  end
+
+  function DangerousMagic(t)
+    local buff = { 5782, 118, 122, 339, 1499, 6358, 605, 20066, 8122, 853, 5484, 71757, 104601, 107629, 99567 }
+    for _,v in ipairs(buff) do if UnitDebuffID(t,v) then return true end end
+  end
+
+  healinit = true
+
+end
+
+if not tableSetup then
+-- Constants
+PQ_HolyLight = 635
+PQ_DivineLight = 82326
+PQ_FlashofLight = 19750
+PQ_HolyRadiance = 82327
+PQ_HolyShock = 20473
+PQ_WordofGlory = 85673
+PQ_LightofDawn = 85222
+PQ_Exorcism = 879 
+PQ_DivineShield = 642 
+PQ_DivineProtection = 498 
+PQ_AuraMastery = 31821 
+PQ_BeaconofLight = 53563
+PQ_Cleanse = 4987
+PQ_HandofFreedom = 1044
+PQ_HandofProtection = 1022
+PQ_GoAK = 86150
+PQ_DivineFavor = 31842
+PQ_AvengingWrath = 31884
+PQ_DivinePlea = 54428
+
+-- The Table
+PQ_Abilities = {
+	[PQ_HolyLight] = { checkEnabled = 1, castTime = 2.5, isKnown = IsSpellKnown(635), targetHealth = 92 }, 
+
+	[PQ_DivineLight] = { checkEnabled = 1, castTime = 2.5, isKnown = IsSpellKnown(82326), targetHealth = 58 }, 
+
+	[PQ_FlashofLight] = { checkEnabled = 1, castTime = 1.5, isKnown = IsSpellKnown(19750), targetHealth = 32 }, 
+
+	[PQ_HolyRadiance] = { checkEnabled = 1, castTime = 2.5, isKnown = IsSpellKnown(82327), targetNumber = 4 }, 
+
+	[PQ_HolyShock] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(20473), targetHealth = 95 }, 
+
+	[PQ_WordofGlory] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(85673), targetHealth = 82 }, 
+
+	[PQ_LightofDawn] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(85222), targetNumber = 4 }, 
+
+	[PQ_Exorcism] = { checkEnabled = 0, castTime = 1.5, isKnown = IsSpellKnown(879) },
+
+	[PQ_DivineShield] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(642), playerHealth = 45 },
+
+	[PQ_DivineProtection] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(498), playerHealth = 22 },
+
+	[PQ_AuraMastery] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(31821) },
+
+	[PQ_BeaconofLight] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(53563) },
+
+	[PQ_Cleanse] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(4987) },
+
+	[PQ_HandofFreedom] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(1044) },
+
+	[PQ_HandofProtection] = { checkEnabled = 0, castTime = 0, isKnown = IsSpellKnown(1022), targetHealth = 40 },
+
+	[PQ_GoAK] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(86150), targetHealth = 35 },
+
+	[PQ_DivineFavor] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(31842), targetHealth = 45 },
+
+	[PQ_AvengingWrath] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(31884), targetHealth = 40 },
+
+	[PQ_DivinePlea] = { checkEnabled = 1, castTime = 0, isKnown = IsSpellKnown(54428), playerMana = 80 }
+
+}
+
+	tableSetup = 1
+end
+
+if not bubbaFunction then
+
+	function castTime(spellName)
+		local SoL = select(5, GetTalentInfo(1, 13))
+		local currentHaste = (GetCombatRatingBonus(20) + SoL)
+
+		return (PQ_Abilities[spellName].castTime * (100 - currentHaste))
+	end
+	
+	CurrentHealth = 100 * UnitHealth(&amp;quot;player&amp;quot;) / UnitHealthMax(&amp;quot;player&amp;quot;)
+	bubbaFunction = 1
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Holy Light</Name><Default>false</Default><SpellID>635</SpellID><Actions></Actions><Lua>if PQ_Abilities[PQ_HolyLight].isKnown and PQ_Abilities[PQ_HolyLight].checkEnabled then
+	if PQR_CustomTargetHP &amp;lt; 92 then
+		return true
+	end
+end
+
+local hlCastTime = (select(7, GetSpellInfo(635)) / 1000)
+if UnitExists(&amp;quot;mouseover&amp;quot;) and UnitIsUnit(&amp;quot;player&amp;quot;, &amp;quot;mouseover&amp;quot;) then
+	PQR_WriteToChat(tostring(PQ_Abilities[PQ_DivineLight].castTime))
+end</Lua><RecastDelay>100</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Debug Mode --</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>if pauseToggle == nil then modkeytime = 0 end
+if IsRightControlKeyDown() and GetTime() - modkeytime &amp;gt; 1  then
+  modkeytime = GetTime()
+  if pauseToggle then 
+    pauseToggle = nil 
+  else 
+    pauseToggle = 1 
+  end
+end
+
+if pauseToggle == 1 then
+	if IsLeftShiftKeyDown() and IsLeftControlKeyDown() and IsLeftAltKeyDown() then
+		bubbaFunction = 0
+		healinit = 0
+		tableSetup = 0
+	end
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>Enabling/Disabling Spells</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>local InfusionProc = UnitBuffID(&amp;quot;player&amp;quot;, 54149)
+
+if InfusionProc then
+	PQ_Abilities[PQ_HolyLight].checkEnabled = 0
+elseif not InufsionProc then
+	PQ_Abilities[PQ_HolyLight].checkEnabled = 1
+end</Lua><RecastDelay>0</RecastDelay><Target>Custom</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability><Ability><Name>-- Variables --</Name><Default>false</Default><SpellID>0</SpellID><Actions></Actions><Lua>-- Set the Variable Cast Time based off Haste and Current Procs
+local spellsToCheck = { PQ_HolyLight, PQ_DivineLight, PQ_FlashofLight, PQ_Exorcism, PQ_HolyRadiance }
+for i, v in pairs(spellsToCheck) do
+	if PQ_Abilities[v] then
+		PQ_Abilities[v].castTime = (select(7, GetSpellInfo(v)) / 1000)
+	end
+end</Lua><RecastDelay>0</RecastDelay><Target>Target</Target><CancelChannel>False</CancelChannel><LuaBefore></LuaBefore><LuaAfter></LuaAfter></Ability></PALADIN>
